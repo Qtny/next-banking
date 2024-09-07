@@ -11,7 +11,7 @@ import Link from "next/link";
 const MobileSidebar = () => {
   const pathname = usePathname();
   return (
-    <section className="bg-white w-full max-w-[264px]">
+    <section className="bg-white w-full max-w-[264px] xl:hidden">
       <Sheet>
         <SheetTrigger>
           <Image src="/icons/hamburger.svg" alt="hamburger menu" width={30} height={30} className="cursor-pointer" />

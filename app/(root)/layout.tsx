@@ -12,7 +12,7 @@ export default function RootLayout({
     <main className="flex max-md:flex-col gap-5">
       <Sidebar />
       <div className="flex size-full flex-col">
-        <div className="flex justify-between items-center p-5">
+        <div className="flex justify-between items-center p-5  md:hidden">
           <Link href="/" className="flex items-center cursor-pointer gap-2">
             <Image src="/icons/logo.svg" alt="Horizon Logo" width={34} height={34} />
           </Link>
