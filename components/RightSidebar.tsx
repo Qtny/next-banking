@@ -35,9 +35,9 @@ const RightSidebar = ({ user, transactions, banks }: { user: User; transactions:
         {/* maximum of 2 cards shown */}
         <div className="relative w-full">
           <div className="relative z-50 w-[90%]">
-            <BankCard account={banks[0]} showBalance={true} userName="Qtwnt" />
+            <BankCard account={banks[0]} showBalance={false} userName="Qtwnt" />
           </div>
-          <div className="absolute -bottom-6 right-0 w-[90%]">{banks[1] && <BankCard account={banks[1]} showBalance={true} userName="Heyka" />}</div>
+          <div className="absolute -bottom-6 right-0 w-[90%]">{banks[1] && <BankCard account={banks[1]} showBalance={false} userName="Heyka" />}</div>
         </div>
       </section>
     </aside>
