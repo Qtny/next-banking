@@ -7,18 +7,18 @@
 
 // // ========================================
 
-// declare type SignUpParams = {
-//   firstName: string;
-//   lastName: string;
-//   address1: string;
-//   city: string;
-//   state: string;
-//   postalCode: string;
-//   dateOfBirth: string;
-//   ssn: string;
-//   email: string;
-//   password: string;
-// };
+declare type SignUpParams = {
+  firstName?: string;
+  lastName?: string;
+  address1?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  dateOfBirth?: string;
+  ssn?: string;
+  email: string;
+  password: string;
+};
 
 // declare type LoginUser = {
 //   email: string;
@@ -33,6 +33,7 @@ declare type User = {
   dwollaCustomerId: string;
   firstName: string;
   lastName: string;
+  name: string;
   address1: string;
   city: string;
   state: string;
@@ -91,20 +92,20 @@ declare type Bank = {
   sharableId: string;
 };
 
-// declare type AccountTypes =
-//   | "depository"
-//   | "credit"
-//   | "loan "
-//   | "investment"
-//   | "other";
+declare type AccountTypes =
+  | "depository"
+  | "credit"
+  | "loan "
+  | "investment"
+  | "other";
 
 // declare type Category = "Food and Drink" | "Travel" | "Transfer";
 
-// declare type CategoryCount = {
-//   name: string;
-//   count: number;
-//   totalCount: number;
-// };
+declare type CategoryCount = {
+  name: string;
+  count: number;
+  totalCount: number;
+};
 
 // declare type Receiver = {
 //   firstName: string;
@@ -292,10 +293,10 @@ declare type Bank = {
 //   bankId: string;
 // }
 
-// declare interface signInProps {
-//   email: string;
-//   password: string;
-// }
+declare interface signInProps {
+  email: string;
+  password: string;
+}
 
 // declare interface getUserInfoProps {
 //   userId: string;

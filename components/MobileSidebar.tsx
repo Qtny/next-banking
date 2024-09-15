@@ -7,8 +7,9 @@ import { sidebarLinks } from "@/constants";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import Footer from "./Footer";
 
-const MobileSidebar = () => {
+const MobileSidebar = ({ user }: { user: User }) => {
   const pathname = usePathname();
   return (
     <section className="bg-white w-full max-w-[264px] xl:hidden">
@@ -23,20 +24,23 @@ const MobileSidebar = () => {
           </Link>
 
           <SheetClose asChild>
-            <nav>
-              {sidebarLinks.map((item) => {
-                const isActive = pathname === item.route || pathname.startsWith(`${item.route}/`);
-                return (
-                  <SheetClose asChild key={item.label}>
-                    <Link href={item.route} className={cn("flex w-full rounded-md px-4 py-4", { "bg-bankGradient": isActive })}>
-                      <div className="flex gap-2">
-                        <Image src={item.imgURL} alt={item.label} width={24} height={24} className={cn({ "brightness-[3] invert-0": isActive })} />
-                        <p className={cn("text-base leading-6 text-black-2 font-semibold", { "!text-white": isActive })}>{item.label}</p>
-                      </div>
-                    </Link>
-                  </SheetClose>
-                );
-              })}
+            <nav className="flex flex-col justify-between w-full">
+              <div className="flex flex-col gap-2">
+                {sidebarLinks.map((item) => {
+                  const isActive = pathname === item.route || pathname.startsWith(`${item.route}/`);
+                  return (
+                    <SheetClose asChild key={item.label}>
+                      <Link href={item.route} className={cn("flex w-full rounded-md px-4 py-4", { "bg-bankGradient": isActive })}>
+                        <div className="flex gap-2">
+                          <Image src={item.imgURL} alt={item.label} width={24} height={24} className={cn({ "brightness-[3] invert-0": isActive })} />
+                          <p className={cn("text-base leading-6 text-black-2 font-semibold", { "!text-white": isActive })}>{item.label}</p>
+                        </div>
+                      </Link>
+                    </SheetClose>
+                  );
+                })}
+              </div>
+              <Footer user={user} />
             </nav>
           </SheetClose>
         </SheetContent>

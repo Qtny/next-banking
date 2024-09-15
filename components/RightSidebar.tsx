@@ -11,13 +11,13 @@ const RightSidebar = ({ user, transactions, banks }: { user: User; transactions:
         <div className="h-[120px] w-full bg-gradient-mesh bg-no-repeat bg-cover" />
         <div className="px-6">
           <div className="rounded-full size-[96px] border-white border-[4px] bg-gray-500 relative -top-8 flex justify-center items-center font-bold text-3xl shadow-profile text-white font-ibm-plex-serif">
-            {user.firstName[0]}
+            {user?.name[0]}
           </div>
           <div className="flex flex-col gap-1">
             <h1 className="font-semibold text-2xl text-gray-900">
-              {user.firstName} {user.lastName}
+              {user?.name}
             </h1>
-            <h2 className="font-normal text-base text-gray-600">{user.email}</h2>
+            <h2 className="font-normal text-base text-gray-600">{user?.email}</h2>
           </div>
         </div>
       </section>
