@@ -1,6 +1,6 @@
 "use server";
 
-import { CountryCode, ItemPublicTokenExchangeRequest, LinkTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid";
+import { CountryCode, LinkTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid";
 import { plaidClient } from "../server/plaid";
 import { encryptId, parseStringify } from "../utils";
 import { revalidatePath } from "next/cache";
@@ -16,19 +16,17 @@ export const createPlaidToken = async () => {
 
 export const createLinkToken = async (user: User) => {
   try {
-    console.log("User from Backend", user);
     const tokenConfig: LinkTokenCreateRequest = {
       user: {
         client_user_id: user?.$id,
       },
-      client_name: user.name,
+      client_name: `${user.firstName} ${user.lastName}`,
       products: ["auth"] as Products[],
       language: "en",
       country_codes: ["US"] as CountryCode[],
     };
 
     const response = await plaidClient.linkTokenCreate(tokenConfig);
-    console.log("Plaid Link Token response : ");
     return parseStringify({
       linkedToken: response.data.link_token,
     });
@@ -37,34 +35,37 @@ export const createLinkToken = async (user: User) => {
   }
 };
 
-export const exchangePublicToken = async ({ publicToken, user }: { publicToken: string; user: User }) => {
+export const exchangePublicToken = async ({ publicToken, user }: exchangePublicTokenProps) => {
   try {
     // exchange public token
-    const exchangeTokenParams: ItemPublicTokenExchangeRequest = {
+    const response = await plaidClient.itemPublicTokenExchange({
       public_token: publicToken,
-    };
-    const response = await plaidClient.itemPublicTokenExchange(exchangeTokenParams);
+    });
     const { access_token, item_id } = response.data;
+    console.log("Access token => ", access_token);
+    console.log("Item ID => ", item_id);
 
     // get accounts
     const accountResponse = await plaidClient.accountsGet({
       access_token,
     });
-    const accounts = accountResponse.data.accounts[0];
+    const accountData = accountResponse.data.accounts[0];
+    console.log("First account => ", accountData);
 
     // connect to dwolla processor using access token and account id
     const dwollaResponse = await plaidClient.processorTokenCreate({
       access_token,
-      account_id: accounts.account_id,
+      account_id: accountData.account_id,
       processor: ProcessorTokenCreateRequestProcessorEnum.Dwolla,
     });
     const { processor_token } = dwollaResponse.data;
+    console.log("Processor token => ", processor_token);
 
     // create funding source url for the account using Dwolla customer ID, processor token and bank name
     const fundingSourceUrl = await addFundingSource({
       dwollaCustomerId: user.dwollaCustomerId,
       processorToken: processor_token,
-      bankName: accounts.name,
+      bankName: accountData.name,
     });
     if (!fundingSourceUrl) throw Error;
 
@@ -72,10 +73,10 @@ export const exchangePublicToken = async ({ publicToken, user }: { publicToken: 
     await createBankAccount({
       userId: user.$id,
       bankId: item_id,
-      accountId: accounts.account_id,
+      accountId: accountData.account_id,
       accessToken: access_token,
       fundingSourceUrl,
-      sharableId: encryptId(accounts.account_id),
+      sharableId: encryptId(accountData.account_id),
     });
 
     // revalidate the path to reflect the changes

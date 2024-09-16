@@ -44,6 +44,7 @@ export const addFundingSource = async ({ dwollaCustomerId, processorToken, bankN
 const createOnDemandAuthorization = async () => {
   try {
     const onDemandAuthorization = await dwollaClient.post("on-demand-authorizations");
+    console.log("Received On Demand Authorization => ", onDemandAuthorization.body._links);
     return onDemandAuthorization.body._links;
     // {
     //     "_links": {
@@ -67,8 +68,9 @@ export const createFundingSource = async ({ customerId, fundingSourceName, plaid
       name: fundingSourceName,
       plaidToken,
     };
-    const response = dwollaClient.post(url, body);
-    return (await response).headers.get("location");
+    const response = await dwollaClient.post(url, body);
+    console.log("Received Create Funding Source => ", response.headers.get("location"));
+    return response.headers.get("location");
   } catch (e) {
     console.error("Create a Dwolla Funding Source failed : ");
     console.error(e);

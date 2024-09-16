@@ -20,6 +20,8 @@ const PlaidLink = ({ user, variant }: PlaidLinkProps) => {
   // create link token
   const onSuccess = useCallback<PlaidLinkOnSuccess>(
     async (public_token: string) => {
+      console.log("User Object => ", user);
+      console.log("Dwolla Customer Id => ", user.dwollaCustomerId);
       await exchangePublicToken({
         publicToken: public_token,
         user,

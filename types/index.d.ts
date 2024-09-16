@@ -302,10 +302,10 @@ declare interface signInProps {
 //   userId: string;
 // }
 
-// declare interface exchangePublicTokenProps {
-//   publicToken: string;
-//   user: User;
-// }
+declare interface exchangePublicTokenProps {
+  publicToken: string;
+  user: User;
+}
 
 declare interface createBankAccountProps {
   accessToken: string;

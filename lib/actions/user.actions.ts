@@ -47,7 +47,7 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
     const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomer);
 
     // create user for database
-    await database.createDocument(APPWRITE_DATABASE_ID!, APPWRITE_USER_COLLECTION_ID!, ID.unique(), {
+    const dbUser = await database.createDocument(APPWRITE_DATABASE_ID!, APPWRITE_USER_COLLECTION_ID!, ID.unique(), {
       ...userData,
       userId: newUser.$id,
       dwollaCustomerId,
@@ -63,7 +63,7 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
       secure: true,
     });
 
-    return parseStringify(newUser);
+    return parseStringify(dbUser);
   } catch (e) {
     console.error("Error", e);
   }
