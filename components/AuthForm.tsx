@@ -14,6 +14,7 @@ import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { signIn, signUp } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
+import PlaidLink from "./PlaidLink";
 
 const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
   const router = useRouter();
@@ -46,7 +47,20 @@ const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
       }
 
       if (type === "sign-up") {
-        const newUser = await signUp(values);
+        const userData = {
+          firstName: values.firstName!,
+          lastName: values.lastName!,
+          address1: values.address1!,
+          city: values.city!,
+          state: values.state!,
+          postalCode: values.postalCode!,
+          dateOfBirth: values.dateOfBirth!,
+          ssn: values.ssn!,
+          email: values.email,
+          password: values.password,
+        };
+
+        const newUser = await signUp(userData);
         if (newUser) {
           setUser(newUser);
         }
@@ -75,7 +89,7 @@ const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
       </div>
 
       {user ? (
-        <div></div>
+        <PlaidLink user={user} variant={"primary"} />
       ) : (
         <div className="w-full gap-10 flex flex-col">
           <Form {...form}>
@@ -89,7 +103,7 @@ const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
                   <CustomInput control={form.control} label="Address" name="address1" placeholder="Enter your specific address" />
                   <CustomInput control={form.control} label="City" name="city" placeholder="Example: Subang Jaya" />
                   <div className="flex justify-between gap-4">
-                    <CustomInput control={form.control} label="State" name="state" placeholder="Example: SEL" />
+                    <CustomInput control={form.control} label="State" name="state" placeholder="Example: SE" />
                     <CustomInput control={form.control} label="Postal Code" name="postalCode" placeholder="Example: 12300" />
                   </div>
                   <div className="flex justify-between gap-4">

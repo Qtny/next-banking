@@ -8,11 +8,11 @@ const Footer = ({ user }: { user: User }) => {
   };
 
   return (
-    <div className="flex justify-between w-full border-t border-gray-200 pt-8 gap-2">
+    <div className="flex md:flex-col md:justify-center md:items-center md:gap-6 md:pb-4 xl:flex-row justify-between w-full border-t border-gray-200 pt-8 gap-2">
       <div className="flex gap-3">
         <div className="rounded-full size-[40px] bg-gray-500 flex justify-center items-center font-bold text-xl shadow-profile text-white font-ibm-plex-serif">{user.name[0]}</div>
 
-        <div className="hidden xl:flex flex-col justify-between items-start">
+        <div className="flex md:hidden xl:flex flex-col justify-between items-start">
           <h1 className="font-semibold text-sm text-gray-700">{user.name}</h1>
           <p className="font-normal text-sm text-gray-600 text-ellipsis whitespace-nowrap">{user.email}</p>
         </div>

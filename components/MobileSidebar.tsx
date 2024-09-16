@@ -12,20 +12,20 @@ import Footer from "./Footer";
 const MobileSidebar = ({ user }: { user: User }) => {
   const pathname = usePathname();
   return (
-    <section className="bg-white w-full max-w-[264px] xl:hidden">
+    <section className="bg-white h-full w-full max-w-[264px] xl:hidden">
       <Sheet>
-        <SheetTrigger>
+        <SheetTrigger asChild>
           <Image src="/icons/hamburger.svg" alt="hamburger menu" width={30} height={30} className="cursor-pointer" />
         </SheetTrigger>
-        <SheetContent className="bg-white" side={"left"}>
+        <SheetContent className="bg-white border-8 h-screen p-4 border-purple-600" side={"left"}>
           <Link href="/" className="flex mb-12 items-center cursor-pointer gap-2">
             <Image src="/icons/logo.svg" alt="Horizon Logo" width={34} height={34} />
             <p className="font-bold font-ibm-plex-serif text-[28px] leading-[34px] 2xl:text-26 text-black-1">Horizon</p>
           </Link>
 
-          <SheetClose asChild>
-            <nav className="flex flex-col justify-between w-full">
-              <div className="flex flex-col gap-2">
+          <div className="flex h-[calc(100vh-140px)] flex-col justify-between overflow-y-auto">
+            <SheetClose asChild>
+              <nav className="flex flex-col h-full gap-6">
                 {sidebarLinks.map((item) => {
                   const isActive = pathname === item.route || pathname.startsWith(`${item.route}/`);
                   return (
@@ -39,10 +39,10 @@ const MobileSidebar = ({ user }: { user: User }) => {
                     </SheetClose>
                   );
                 })}
-              </div>
-              <Footer user={user} />
-            </nav>
-          </SheetClose>
+              </nav>
+            </SheetClose>
+            <Footer user={user} />
+          </div>
         </SheetContent>
       </Sheet>
     </section>
