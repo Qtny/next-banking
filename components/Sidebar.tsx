@@ -7,12 +7,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import Footer from "./Footer";
+import PlaidLink from "./PlaidLink";
 
 const Sidebar = ({ user }: { user: User }) => {
   const pathname = usePathname();
 
   return (
-    <section className="flex 2xl:w-[355px] flex-col pt-8 w-fit h-screen border-r border-gray-200 bg-white sm:p-4 xl:p-6 max-md:hidden">
+    <section className="sticky left-0 top-0 flex 2xl:w-[355px] flex-col pt-8 w-fit h-screen border-r border-gray-200 bg-white sm:p-4 xl:p-6 max-md:hidden">
       <nav className="flex flex-col gap-2 items-center md:items-start h-full">
         <Link href="/" className="flex mb-12 items-center cursor-pointer gap-2">
           <Image src="/icons/logo.svg" alt="Horizon Logo" width={34} height={34} />
@@ -20,7 +21,7 @@ const Sidebar = ({ user }: { user: User }) => {
         </Link>
 
         <div className="flex flex-col justify-between h-full w-full">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 items-start">
             {sidebarLinks.map((item) => {
               const isActive = pathname === item.route || pathname.startsWith(`${item.route}/`);
               return (
@@ -32,6 +33,7 @@ const Sidebar = ({ user }: { user: User }) => {
                 </Link>
               );
             })}
+            <PlaidLink user={user} />
           </div>
           <Footer user={user} />
         </div>

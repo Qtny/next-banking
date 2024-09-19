@@ -1,6 +1,6 @@
 "use server";
 
-import { ID } from "node-appwrite";
+import { ID, Query } from "node-appwrite";
 import { extractCustomerIdFromUrl, parseStringify } from "../utils";
 import { cookies } from "next/headers";
 import { createAdminClient, createSessionClient } from "../server/appwrite";
@@ -18,7 +18,8 @@ export const signIn = async ({ email, password }: signInProps) => {
       secure: true,
     });
 
-    return parseStringify(session);
+    const user = await getUserInfo({ userId: session.userId });
+    return parseStringify(user);
   } catch (e) {
     console.error("Error", e);
   }
@@ -74,7 +75,10 @@ export const getLoggedInUser = async () => {
     const { account } = await createSessionClient();
     const appwriteAccount = await account.get();
 
-    return parseStringify(appwriteAccount);
+    // get user from database
+    const user = await getUserInfo({ userId: appwriteAccount.$id });
+
+    return parseStringify(user);
   } catch (error) {
     return null;
   }
@@ -90,6 +94,18 @@ export const logOutAccount = async () => {
   }
 };
 
+export const getUserInfo = async ({ userId }: getUserInfoProps) => {
+  try {
+    const { APPWRITE_DATABASE_ID, APPWRITE_USER_COLLECTION_ID } = process.env;
+
+    const { database } = await createAdminClient();
+    const user = await database.listDocuments(APPWRITE_DATABASE_ID!, APPWRITE_USER_COLLECTION_ID!, [Query.equal("userId", userId)]);
+
+    return parseStringify(user.documents[0]);
+  } catch (e) {
+    console.error(e);
+  }
+};
 export const createBankAccount = async ({ userId, bankId, accountId, accessToken, fundingSourceUrl, sharableId }: createBankAccountProps) => {
   try {
     const { APPWRITE_DATABASE_ID, APPWRITE_BANK_COLLECTION_ID } = process.env;
@@ -103,6 +119,34 @@ export const createBankAccount = async ({ userId, bankId, accountId, accessToken
       fundingSourceUrl,
       sharableId,
     });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const getBanks = async ({ userId }: getBanksProps) => {
+  try {
+    const { APPWRITE_DATABASE_ID, APPWRITE_BANK_COLLECTION_ID } = process.env;
+
+    const { database } = await createAdminClient();
+    const banks = await database.listDocuments(APPWRITE_DATABASE_ID!, APPWRITE_BANK_COLLECTION_ID!, [Query.equal("userId", userId)]);
+
+    return parseStringify(banks.documents);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const getBank = async ({ documentId }: getBankProps) => {
+  try {
+    const { APPWRITE_DATABASE_ID, APPWRITE_BANK_COLLECTION_ID } = process.env;
+
+    const { database } = await createAdminClient();
+    const bank = await database.listDocuments(APPWRITE_DATABASE_ID!, APPWRITE_BANK_COLLECTION_ID!, [Query.equal("$id", documentId)]);
+
+    if (bank.total !== 1) return null;
+
+    return parseStringify(bank.documents[0]);
   } catch (e) {
     console.error(e);
   }

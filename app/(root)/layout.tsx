@@ -12,9 +12,8 @@ export default async function RootLayout({
 }>) {
   const user = await getLoggedInUser();
   if (!user) redirect("/sign-in");
-
   return (
-    <main className="flex max-md:flex-col gap-5">
+    <main className="flex max-md:flex-col gap-5 overflow-y-auto">
       <Sidebar user={user} />
       <div className="flex size-full flex-col">
         <div className="flex justify-between items-center p-5  md:hidden">
