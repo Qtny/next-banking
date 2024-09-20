@@ -88,3 +88,35 @@ export const createCustomer = async (customerParams: NewDwollaCustomerParams) =>
     console.error("Errors: ", e.body._embedded.errors);
   }
 };
+
+export const createTransfer = async ({ amount, destinationFundingSourceUrl, sourceFundingSourceUrl }: TransferParams) => {
+  console.log("==============================");
+  console.log(amount);
+  console.log(destinationFundingSourceUrl);
+  console.log(sourceFundingSourceUrl);
+  console.log("==============================");
+  try {
+    const url = `transfers`;
+    const body = {
+      _links: {
+        source: {
+          href: sourceFundingSourceUrl,
+        },
+        destination: {
+          href: destinationFundingSourceUrl,
+        },
+      },
+      amount: {
+        currency: "USD",
+        value: amount,
+      },
+    };
+    const response = await dwollaClient.post(url, body);
+
+    return response.headers.get("location");
+  } catch (e: any) {
+    console.error("Create a Dwolla Transfer failed : ");
+    console.error("Error Message : ", e.body.message);
+    console.error("Errors: ", e.body._embedded.errors);
+  }
+};

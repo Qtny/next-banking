@@ -42,15 +42,12 @@ export const exchangePublicToken = async ({ publicToken, user }: exchangePublicT
       public_token: publicToken,
     });
     const { access_token, item_id } = response.data;
-    console.log("Access token => ", access_token);
-    console.log("Item ID => ", item_id);
 
     // get accounts
     const accountResponse = await plaidClient.accountsGet({
       access_token,
     });
     const accountData = accountResponse.data.accounts[0];
-    console.log("First account => ", accountData);
 
     // connect to dwolla processor using access token and account id
     const dwollaResponse = await plaidClient.processorTokenCreate({
@@ -59,7 +56,6 @@ export const exchangePublicToken = async ({ publicToken, user }: exchangePublicT
       processor: ProcessorTokenCreateRequestProcessorEnum.Dwolla,
     });
     const { processor_token } = dwollaResponse.data;
-    console.log("Processor token => ", processor_token);
 
     // create funding source url for the account using Dwolla customer ID, processor token and bank name
     const fundingSourceUrl = await addFundingSource({

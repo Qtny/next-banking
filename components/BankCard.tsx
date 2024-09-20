@@ -5,7 +5,7 @@ import React from "react";
 
 const BankCard = ({ account, userName, showBalance }: { account: Account; userName: string; showBalance: boolean }) => {
   return (
-    <Link href="/" className=" max-w-[320px] flex relative">
+    <Link href={`/transaction-history?id=${account.appwriteItemId}`} className=" max-w-[320px] flex relative">
       <div className={`h-[190px] w-[70%] ${account.type === "mastercard" ? "bg-gray-700" : "bg-bank-gradient"} rounded-l-xl p-4 pb-3 flex flex-col justify-between`}>
         <div>
           <h1 className="font-semibold text-base text-white">{account.name || userName}</h1>

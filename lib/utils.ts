@@ -194,3 +194,11 @@ export const authFormSchema = (type: string) =>
     email: z.string().email(),
     password: z.string().min(3),
   });
+
+export const paymentFormSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  name: z.string().optional(),
+  amount: z.string().min(4, "Amount is too short"),
+  senderBank: z.string().min(4, "Please select a valid bank account"),
+  sharableId: z.string().min(4, "Please select a valid sharable Id"),
+});

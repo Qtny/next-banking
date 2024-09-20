@@ -28,7 +28,7 @@ const RecentTransactions = ({ accounts, appwriteItemId, page = 1, transactions }
           })}
         </TabsList>
         {accounts.map((account: Account) => (
-          <TabsContent key={account.id} className="flex flex-col gap-5" value={account.appwriteItemId}>
+          <TabsContent key={account.id} className="space-y-5" value={account.appwriteItemId}>
             <div className="flex flex-col gap-[20px]">
               <BankInfo account={account} type={"full"} appwriteItemId={account.appwriteItemId} />
             </div>

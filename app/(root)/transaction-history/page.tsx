@@ -1,3 +1,4 @@
+import BankDropdown from "@/components/BankDropdown";
 import HeaderBox from "@/components/HeaderBox";
 import TransactionsTable from "@/components/TransactionsTable";
 import { Button } from "@/components/ui/button";
@@ -17,13 +18,13 @@ const TransactionHistory = async ({ searchParams: { id, page } }: SearchParamPro
   const appwriteItemId = (id as string) || accountsData[0].appwriteItemId;
 
   const account = await getAccount({ appwriteItemId });
-  
+
   return (
-    <section className="flex flex-col gap-8 py-12 px-8">
+    <section className="flex flex-col gap-8 py-12 px-8 h-screen w-full">
       <div className="flex justify-between">
         <HeaderBox isHome={false} title="Transaction History" subtext="Gain Insights and Track Your Transactions Over Time" user={loggedIn} />
         {/* Come back for Bank Dropdown */}
-        <Button>Select Account</Button>
+        <BankDropdown accounts={accountsData} otherStyles="md:w-[300px]" />
       </div>
 
       <div className="flex justify-between items-center p-6 rounded-xl text-white bg-bankGradient w-full h-fit">
@@ -40,7 +41,7 @@ const TransactionHistory = async ({ searchParams: { id, page } }: SearchParamPro
           <h1 className="font-semibold text-2xl max-xl:text-lg">{formatAmount(account?.data.currentBalance)}</h1>
         </div>
       </div>
-      
+
       <TransactionsTable transactions={account?.transactions as Transaction[]} />
     </section>
   );

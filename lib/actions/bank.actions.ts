@@ -4,6 +4,7 @@ import { CountryCode } from "plaid";
 import { plaidClient } from "../server/plaid";
 import { getBank, getBanks } from "./user.actions";
 import { parseStringify } from "../utils";
+import { getTransactionsByBankId } from "./transaction.actions";
 
 export const getAccounts = async ({ userId }: getAccountsProps) => {
   try {
@@ -59,18 +60,18 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
     const accountData = accountResponse.data.accounts[0];
 
     // 3, get transfer transactions from appwrite
-    // const transferTransactionsData = await getTransactionsByBankId({ bankId: bank.$id });
-    // transferTransactionsData.documents.map((transferData: any) => {
-    //   return {
-    //     id: transferData.$id,
-    //     name: transferData.name!,
-    //     amount: transferData.amount!,
-    //     date: transferData.$createdAt,
-    //     paymentChannel: transferData.channel,
-    //     category: transferData.category,
-    //     type: transferData.senderBankId === bank.$id ? "debit" : "credit",
-    //   };
-    // });
+    const transferTransactionsData = await getTransactionsByBankId({ bankId: bank.$id });
+    const transfers = transferTransactionsData.documents.map ((transferData: any) => {
+      return {
+        id: transferData.$id,
+        name: transferData.name!,
+        amount: `-${transferData.amount!}`,
+        date: transferData.$createdAt,
+        paymentChannel: transferData.channel,
+        category: transferData.category,
+        type: transferData.senderBankId === bank.$id ? "debit" : "credit",
+      };
+    });
 
     // 4. get institution info from plaid
     const { institution_id } = accountResponse.data.item;
@@ -96,7 +97,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
     };
 
     // 7. sort transactions (transaction from plaid and transfer transaction from database) by date such that the most recent transaction is first
-    const allTransactions = [...transactions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const allTransactions = [...transactions, ...transfers].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     return parseStringify({
       data: account,
@@ -149,13 +150,6 @@ export const getTransactions = async ({ accessToken }: getTransactionsProps) => 
     }
 
     return parseStringify(transactions);
-  } catch (e) {
-    console.error("An error occurred while getting transactions", e);
-  }
-};
-
-export const getTransactionsByBankId = async ({ bankId }: getTransactionsByBankIdProps) => {
-  try {
   } catch (e) {
     console.error("An error occurred while getting transactions", e);
   }

@@ -112,11 +112,11 @@ declare type CategoryCount = {
 //   lastName: string;
 // };
 
-// declare type TransferParams = {
-//   sourceFundingSourceUrl: string;
-//   destinationFundingSourceUrl: string;
-//   amount: string;
-// };
+declare type TransferParams = {
+  sourceFundingSourceUrl: string;
+  destinationFundingSourceUrl: string;
+  amount: string;
+};
 
 declare type AddFundingSourceParams = {
   dwollaCustomerId: string;
@@ -192,11 +192,11 @@ declare interface PlaidLinkProps {
 //   type: "sign-in" | "sign-up";
 // }
 
-// declare interface BankDropdownProps {
-//   accounts: Account[];
-//   setValue?: UseFormSetValue<any>;
-//   otherStyles?: string;
-// }
+declare interface BankDropdownProps {
+  accounts: Account[];
+  setValue?: UseFormSetValue<any>;
+  otherStyles?: string;
+}
 
 declare interface BankTabItemProps {
   account: Account;
@@ -251,9 +251,9 @@ declare interface DoughnutChartProps {
   accounts: Account[];
 }
 
-// declare interface PaymentTransferFormProps {
-//   accounts: Account[];
-// }
+declare interface PaymentTransferFormProps {
+  accounts: Account[];
+}
 
 // // Actions
 declare interface getAccountsProps {
@@ -279,15 +279,15 @@ declare interface CreateFundingSourceOptions {
   _links: object; // Dwolla On Demand Authorization Link
 }
 
-// declare interface CreateTransactionProps {
-//   name: string;
-//   amount: string;
-//   senderId: string;
-//   senderBankId: string;
-//   receiverId: string;
-//   receiverBankId: string;
-//   email: string;
-// }
+declare interface CreateTransactionProps {
+  name: string;
+  amount: string;
+  senderId: string;
+  senderBankId: string;
+  receiverId: string;
+  receiverBankId: string;
+  email: string;
+}
 
 declare interface getTransactionsByBankIdProps {
   bankId: string;
@@ -324,6 +324,6 @@ declare interface getBankProps {
   documentId: string;
 }
 
-// declare interface getBankByAccountIdProps {
-//   accountId: string;
-// }
+declare interface getBankByAccountIdProps {
+  accountId: string;
+}
