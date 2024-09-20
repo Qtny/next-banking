@@ -1,14 +1,15 @@
 import BankDropdown from "@/components/BankDropdown";
 import HeaderBox from "@/components/HeaderBox";
+import { Pagination } from "@/components/Pagination";
 import TransactionsTable from "@/components/TransactionsTable";
-import { Button } from "@/components/ui/button";
+import { NUMBER_PER_PAGE } from "@/constants";
 import { getAccount, getAccounts } from "@/lib/actions/bank.actions";
 import { getLoggedInUser } from "@/lib/actions/user.actions";
 import { formatAmount } from "@/lib/utils";
 import React from "react";
 
 const TransactionHistory = async ({ searchParams: { id, page } }: SearchParamProps) => {
-  const currentPage = Number(page as string);
+  const currentPage = Number(page as string) || 1;
   const loggedIn: User = await getLoggedInUser();
   const accounts = await getAccounts({ userId: loggedIn.$id });
 
@@ -18,6 +19,17 @@ const TransactionHistory = async ({ searchParams: { id, page } }: SearchParamPro
   const appwriteItemId = (id as string) || accountsData[0].appwriteItemId;
 
   const account = await getAccount({ appwriteItemId });
+
+  const totalPages = Math.ceil(account.transactions.length / NUMBER_PER_PAGE);
+
+  const endIndex = currentPage * NUMBER_PER_PAGE;
+  const startIndex = endIndex - NUMBER_PER_PAGE;
+
+  const slicedTransactions = account.transactions.slice(startIndex, endIndex);
+
+  // console.log("Total pages => ", totalPages);
+  // console.log(`From items ${startIndex} to ${endIndex}`);
+  // console.log("Projected transactions => ", slicedTransactions);
 
   return (
     <section className="flex flex-col gap-8 py-12 px-8 h-screen w-full">
@@ -42,7 +54,9 @@ const TransactionHistory = async ({ searchParams: { id, page } }: SearchParamPro
         </div>
       </div>
 
-      <TransactionsTable transactions={account?.transactions as Transaction[]} />
+      <TransactionsTable transactions={slicedTransactions as Transaction[]} />
+
+      {totalPages > 1 && <Pagination page={currentPage} totalPages={totalPages} />}
     </section>
   );
 };

@@ -168,10 +168,10 @@ declare interface BankInfoProps {
 //   connectBank?: boolean;
 // }
 
-// declare interface PaginationProps {
-//   page: number;
-//   totalPages: number;
-// }
+declare interface PaginationProps {
+  page: number;
+  totalPages: number;
+}
 
 declare interface PlaidLinkProps {
   user: User;
@@ -243,9 +243,9 @@ declare interface TransactionTableProps {
   transactions: Transaction[];
 }
 
-// declare interface CategoryProps {
-//   category: CategoryCount;
-// }
+declare interface CategoryProps {
+  category: CategoryCount;
+}
 
 declare interface DoughnutChartProps {
   accounts: Account[];

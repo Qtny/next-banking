@@ -2,8 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import BankCard from "./BankCard";
+import Category from "./Category";
+import { countTransactionCategories } from "@/lib/utils";
 
 const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
+  const categories = countTransactionCategories(transactions);
+
   return (
     <aside className="h-screen gap-8 xl:flex hidden flex-col w-[500px] border-l border-[1px] border-gray-200">
       {/* Profile */}
@@ -14,9 +18,7 @@ const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
             {user?.firstName[0]}
           </div>
           <div className="flex flex-col gap-1">
-            <h1 className="font-semibold text-2xl text-gray-900">
-              {`${user?.firstName} ${user?.lastName}`}
-            </h1>
+            <h1 className="font-semibold text-2xl text-gray-900">{`${user?.firstName} ${user?.lastName}`}</h1>
             <h2 className="font-normal text-base text-gray-600">{user?.email}</h2>
           </div>
         </div>
@@ -38,6 +40,15 @@ const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
             <BankCard account={banks[0]} showBalance={false} userName="Qtwnt" />
           </div>
           <div className="absolute -bottom-6 right-0 w-[90%]">{banks[1] && <BankCard account={banks[1]} showBalance={false} userName="Heyka" />}</div>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-6  px-6 mt-8">
+        <h2 className="font-semibold text-lg">Top Categories</h2>
+        <div className="flex flex-col gap-3">
+          {categories.map((category) => {
+            return <Category key={category.name} category={category} />;
+          })}
         </div>
       </section>
     </aside>

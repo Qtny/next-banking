@@ -6,8 +6,17 @@ import Link from "next/link";
 import BankInfo from "./BankInfo";
 import TransactionsTable from "./TransactionsTable";
 import BankTabItem from "./BankTabItem";
+import { Pagination } from "./Pagination";
+import { NUMBER_PER_PAGE } from "@/constants";
 
 const RecentTransactions = ({ accounts, appwriteItemId, page = 1, transactions }: RecentTransactionsProps) => {
+  const totalPages = Math.ceil(transactions.length / NUMBER_PER_PAGE);
+
+  const endIndex = page * NUMBER_PER_PAGE;
+  const startIndex = endIndex - NUMBER_PER_PAGE;
+
+  const slicedTransactions = transactions.slice(startIndex, endIndex);
+
   return (
     <section className="flex flex-col gap-[30px] pb-5">
       <div className="flex gap-5 justify-between items-center">
@@ -33,7 +42,9 @@ const RecentTransactions = ({ accounts, appwriteItemId, page = 1, transactions }
               <BankInfo account={account} type={"full"} appwriteItemId={account.appwriteItemId} />
             </div>
 
-            <TransactionsTable transactions={transactions} />
+            <TransactionsTable transactions={slicedTransactions} />
+
+            {totalPages > 1 && <Pagination page={page} totalPages={totalPages} />}
           </TabsContent>
         ))}
       </Tabs>
